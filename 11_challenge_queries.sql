@@ -113,6 +113,8 @@ SELECT * FROM EmployeeLineManagers;
 -- Execute the stored procedure where the Customer ID is ‘ALFKI’. 
 -- Note: Stored procedures can be found by opening up the Northwind database and navigating to “Programmability > Stored Procedures
 
+DROP PROCEDURE CustomerTotalFreightAmount;
+
 CREATE PROCEDURE CustomerTotalFreightAmount @CustomerID NVARCHAR(30)
 AS
 SELECT
@@ -130,3 +132,16 @@ GROUP BY
 GO
 
 EXEC CustomerTotalFreightAmount @CustomerID = 'ALFKI';
+
+DROP PROCEDURE GetTableLength;
+
+CREATE PROCEDURE GetTableLength @TableName NVARCHAR(128)
+AS
+BEGIN
+  DECLARE @sql NVARCHAR(MAX)
+  SET @sql = N'SELECT N''' + @TableName + ''' AS [Table Name], COUNT(*) AS [Table Length] FROM ' + QUOTENAME(@TableName)
+  EXEC sp_executesql @sql
+END
+GO
+
+EXEC GetTableLength @TableName = 'Employees';
